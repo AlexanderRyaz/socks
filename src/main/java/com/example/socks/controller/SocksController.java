@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.AttributeNotFoundException;
+
 @RestController
 @RequestMapping("api/socks")
 public class SocksController {
@@ -18,21 +20,21 @@ public class SocksController {
     }
 
     @PostMapping("income")
-    public ResponseEntity<String> addSocks(@RequestBody SockDto sockDto, Long count) {
-        sockService.addSocks(sockDto, count);
-        return new ResponseEntity<>("Добавлено " + count + " носков", HttpStatus.OK);
+    public ResponseEntity<String> addSocks(@RequestBody SockDto sockDto) {
+        sockService.addSocks(sockDto);
+        return new ResponseEntity<>("Добавлено " + sockDto.getCount() + " носков", HttpStatus.OK);
     }
 
     @PostMapping("outcome")
-    public ResponseEntity<String> sellSocks(@RequestBody SockDto sockDto, Long count) {
-        sockService.sellSocks(sockDto, count);
-        return new ResponseEntity<>("Отпущено со склада " + count + " носков", HttpStatus.OK);
+    public ResponseEntity<String> sellSocks(@RequestBody SockDto sockDto) {
+        sockService.sellSocks(sockDto);
+        return new ResponseEntity<>("Отпущено со склада " + sockDto.getCount() + " носков", HttpStatus.OK);
     }
 
     @GetMapping()
     public ResponseEntity<Long> getSockCount(@RequestParam("color") String color,
                                              @RequestParam("operation") String operation,
-                                             @RequestParam("cottonPart") Integer cottonPart) {
+                                             @RequestParam("cottonPart") Integer cottonPart) throws AttributeNotFoundException {
         Long sockCount = sockService.getSockCount(color, operation, cottonPart);
         return new ResponseEntity<>(sockCount, HttpStatus.OK);
     }

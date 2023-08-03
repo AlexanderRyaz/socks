@@ -6,4 +6,5 @@ import lombok.Data;
 public class SockDto {
     private String color;
     private Integer cottonPart;
+    private Long count;
 }
