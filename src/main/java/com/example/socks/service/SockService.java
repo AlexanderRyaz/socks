@@ -5,6 +5,7 @@ import com.example.socks.model.Sock;
 import com.example.socks.repository.SocksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.AttributeNotFoundException;
 
@@ -26,6 +27,7 @@ public class SockService {
         socksRepository.save(sock);
     }
 
+    @Transactional
     public void sellSocks(SockDto sockDto) {
         socksRepository.sellSocks(sockDto.getColor(), sockDto.getCottonPart(), sockDto.getCount());
     }
