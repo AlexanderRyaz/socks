@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.AttributeNotFoundException;
+import java.util.List;
 
 @Service
 public class SockService {
@@ -18,13 +19,19 @@ public class SockService {
         this.socksRepository = socksRepository;
     }
 
+    @Transactional
     public void addSocks(SockDto sockDto) {
-        Sock sock = new Sock();
-        sock.setColor(sockDto.getColor());
-        sock.setCottonPart(sockDto.getCottonPart());
-        sock.setCount(sockDto.getCount());
+        List<Sock> allByColorAndCottonPart = socksRepository.findAllByColorAndCottonPart(sockDto.getColor(), sockDto.getCottonPart());
+        if (allByColorAndCottonPart.isEmpty()) {
+            Sock sock = new Sock();
+            sock.setColor(sockDto.getColor());
+            sock.setCottonPart(sockDto.getCottonPart());
+            sock.setCount(sockDto.getCount());
 
-        socksRepository.save(sock);
+            socksRepository.save(sock);
+        } else {
+            socksRepository.addSocks(sockDto.getColor(), sockDto.getCottonPart(), sockDto.getCount());
+        }
     }
 
     @Transactional
